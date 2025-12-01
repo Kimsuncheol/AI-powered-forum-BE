@@ -9,12 +9,8 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "AI Powered Forum"
     API_V1_STR: str = "/api/v1"
     
-    # Database
-    #  import from .env
-    # DATABASE_URL: str = "mysql+mysqlconnector://root:root@localhost:3306/ai_powered_forum"
-
     # Security
-    SECRET_KEY: str = "YOUR_SUPER_SECRET_KEY_HERE_CHANGE_THIS_IN_PRODUCTION"
+    SECRET_KEY: str = os.getenv("SECRET_KEY")
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     DATABASE_URL: str = os.getenv("DATABASE_URL")
