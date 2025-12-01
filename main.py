@@ -1,9 +1,14 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, APIRouter
 
-from app.api.v1.api import api_router
+from app.api import routes_auth, routes_user
 from app.core.config import settings
 
 app = FastAPI(title=settings.PROJECT_NAME, openapi_url=f"{settings.API_V1_STR}/openapi.json")
+
+# Include routers
+api_router = APIRouter()
+api_router.include_router(routes_auth.router, prefix="/auth", tags=["auth"])
+api_router.include_router(routes_user.router, prefix="/auth", tags=["users"]) # Keeping /auth prefix for /me to match old structure if desired, or move to /users
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
 

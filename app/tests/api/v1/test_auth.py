@@ -2,7 +2,7 @@ from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 from app.core.config import settings
 from app.core import security
-from app.models.user import User
+from app.db.models import User
 
 def create_test_user(db: Session, email: str, password: str) -> User:
     user = User(

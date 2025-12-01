@@ -1,5 +1,6 @@
 import pytest
-from app.core import email
+from app.services.email_service import EmailService
+from app.core import email as email_utils
 from app.core.config import settings
 
 @pytest.mark.asyncio
@@ -22,7 +23,14 @@ async def test_send_reset_password_email(monkeypatch):
     mock_send = MockSend()
     monkeypatch.setattr("aiosmtplib.send", mock_send)
     
-    await email.send_reset_password_email("user@example.com", "token")
+    # We need to mock UserService.get_by_email to return a user since EmailService uses it
+    class MockUser:
+        id = 1
+        email = "user@example.com"
+    
+    monkeypatch.setattr("app.services.user_service.UserService.get_by_email", lambda db, email: MockUser())
+
+    await EmailService.send_password_reset(None, "user@example.com")
     
     assert mock_send.called
     assert mock_send.kwargs["hostname"] == "localhost"
